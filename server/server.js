@@ -14,14 +14,13 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.emit('newMessage', {
-    from: 'Max',
-    text: 'See YA BOI',
-    createdAt: 123445
-  });
-
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime(),
+    });
   });
 
   socket.on('disconnect', () => {
@@ -31,5 +30,5 @@ io.on('connection', (socket) => {
 
 
 server.listen(port, () => {
-  console.log(`Server is up on ${port}`);
+  console.log(`Server is up on port ${port}`);
 });
